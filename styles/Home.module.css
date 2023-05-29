@@ -1,4 +1,13 @@
 .list {
   text-align: left;
   list-style: none;
+  padding-left: 0;
+}
+
+.card {
+  min-width: 500px;
+}
+
+.form {
+  max-width: 500px;
 }

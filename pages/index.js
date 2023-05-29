@@ -11,16 +11,18 @@ export default function Home() {
   const [potentialDrinkList, setPotentialDrinkList] = useState([]);
   const [currentLiquorList, setCurrentLiquorList] = useState([]);
   const [placeholder, setPlaceholder] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [uploadImage, setUploadImage] = useState("");
 
-  useEffect(() => {
-    getInfo()
-      .then((x) => {
-        setResultingList(x.data.resultingList);
-        setPotentialDrinkList(x.data.potentialDrinkList);
-        setCurrentLiquorList(x.data.currentLiquorList);
-      })
-      .catch((e) => console.log(e));
-  }, []);
+  // useEffect(() => {
+  //   getInfo()
+  //     .then((x) => {
+  //       setResultingList(x.data.resultingList);
+  //       setPotentialDrinkList(x.data.potentialDrinkList);
+  //       setCurrentLiquorList(x.data.currentLiquorList);
+  //     })
+  //     .catch((e) => console.log(e));
+  // }, []);
 
   useEffect(() => {
     if (placeholder > 0) {
@@ -31,53 +33,94 @@ export default function Home() {
         })
         .then((x) => {
           setResultingList([...resultingList, ...x.data.resultingList]);
+          setLoading(false);
         })
         .catch((e) => console.log(e));
     }
   }, [placeholder]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const results = await axios.post("/api/generateListFromImage", {
+        image_url: uploadImage,
+      });
+      const { resultingList, potentialDrinkList, currentLiquorList } =
+        results.data;
+      setResultingList(resultingList);
+      setCurrentLiquorList(currentLiquorList);
+      setPotentialDrinkList(potentialDrinkList);
+      setUploadImage("");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <div className="container text-center mb-5">
+    <div className="container text-center">
       <h1>Bar Cart App</h1>
-      <div>
-        {/* <img
+
+      <div className="d-flex justify-content-center">
+        <div className={styles.form}>
+          {/* <img
           src="https://www.thecocktailproject.com/sites/default/files/liquors.jpg"
           alt="bar cart image"
         /> */}
-        <form action="">
-          <label htmlFor="image">Upload Image</label>
-          <input type="text" name="image" id="image" />
-        </form>
-        <div className="mb-5 d-flex justify-content-center">
-          <ul className={styles.list}>
-            {resultingList.map((m) => (
-              <li key={m.name} className={`card mt-2 mb-2 ${styles.card}`}>
-                <div className="card-body">
-                  <h3 className="card-title">{m.name}</h3>
-                  <div className="card-text">
-                    <ul className={styles.list}>
-                      <h4>items you have:</h4>
-                      {m.haves.map((x, i) => (
-                        <li key={`${m.name}-${x}-${i}`}>{x}</li>
-                      ))}
-                    </ul>
-                    <ul className={styles.list}>
-                      <h4>items you need:</h4>
-                      {m.needs.map((x, i) => (
-                        <li key={`${m.name}-${x}-${i}`}>{x}</li>
-                      ))}
-                    </ul>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label
+                htmlFor="uploadImage"
+                className={`form-label ${styles.input}`}
+              >
+                Upload Image
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="uploadImage"
+                id="uploadImage"
+                value={uploadImage}
+                onChange={(e) => setUploadImage(e.target.value)}
+              />
+              <button className="btn btn-primary mt-3">Submit</button>
+            </div>
+          </form>
+          <div className="mb-5">
+            <ul className={styles.list}>
+              {resultingList.map((m) => (
+                <li key={m.name} className={`card mt-2 mb-2 ${styles.card}`}>
+                  <div className="card-body">
+                    <h3 className="card-title">{m.name}</h3>
+                    <div className="card-text">
+                      <ul className={styles.list}>
+                        <h4>items you have:</h4>
+                        {m.haves.map((x, i) => (
+                          <li key={`${m.name}-${x}-${i}`}>{x}</li>
+                        ))}
+                      </ul>
+                      <ul className={styles.list}>
+                        <h4>items you need:</h4>
+                        {m.needs.map((x, i) => (
+                          <li key={`${m.name}-${x}-${i}`}>{x}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              setLoading(true);
+              setPlaceholder(placeholder + 10);
+            }}
+            disabled={loading}
+          >
+            More
+          </button>
         </div>
-        <button
-          className="btn btn-primary"
-          onClick={() => setPlaceholder(placeholder + 10)}
-        >
-          More
-        </button>
       </div>
     </div>
   );
