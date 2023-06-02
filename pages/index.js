@@ -24,20 +24,23 @@ export default function Home() {
   //     .catch((e) => console.log(e));
   // }, []);
 
-  useEffect(() => {
-    if (placeholder > 0) {
-      const t = axios
-        .post("/api/addToList", {
-          slice: potentialDrinkList.slice(placeholder, placeholder + 10),
-          currentLiquorList,
-        })
-        .then((x) => {
-          setResultingList([...resultingList, ...x.data.resultingList]);
-          setLoading(false);
-        })
-        .catch((e) => console.log(e));
-    }
-  }, [placeholder]);
+  const handleAdd = () => {
+    setLoading(true);
+
+    const t = axios
+      .post("/api/addToList", {
+        potentialDrinkList,
+        currentLiquorList,
+        placeholder,
+      })
+      .then((x) => {
+        console.log("list", x.data.resultingList);
+        setResultingList([...resultingList, ...x.data.resultingList]);
+        setLoading(false);
+        setPlaceholder(x.data.newPlaceholder);
+      })
+      .catch((e) => console.log(e));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,11 +48,16 @@ export default function Home() {
       const results = await axios.post("/api/generateListFromImage", {
         image_url: uploadImage,
       });
-      const { resultingList, potentialDrinkList, currentLiquorList } =
-        results.data;
+      const {
+        resultingList,
+        potentialDrinkList,
+        currentLiquorList,
+        placeholder,
+      } = results.data;
       setResultingList(resultingList);
       setCurrentLiquorList(currentLiquorList);
       setPotentialDrinkList(potentialDrinkList);
+      setPlaceholder(placeholder);
       setUploadImage("");
     } catch (e) {
       console.log(e);
@@ -112,10 +120,7 @@ export default function Home() {
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => {
-              setLoading(true);
-              setPlaceholder(placeholder + 10);
-            }}
+            onClick={handleAdd}
             disabled={loading}
           >
             More

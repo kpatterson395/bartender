@@ -18,28 +18,43 @@ export default async (req, res) => {
     const types = res2.data.result.text.map((d) => d.data);
 
     let currentLiquorList = [];
-    let potentialDrinkList = [];
+    let potentialDrinkListDup = [];
 
-    types.forEach((type) => {
-      liquorTypes.forEach((liquor) => {
-        if (type.toLowerCase().includes(liquor)) {
-          currentLiquorList.push(liquor);
-        }
-      });
+    let parsedTypes = [];
+    types.forEach((a) => {
+      if (a.toLowerCase().includes("triple sec")) {
+        parsedTypes.push("triple sec");
+      } else if (a.toLowerCase().includes("irish cream")) {
+        parsedTypes.push("irish cream");
+      } else {
+        parsedTypes.push(...a.toLowerCase().replace(/\n/g, " ").split(" "));
+      }
     });
-    for (let liq of currentLiquorList) {
-      const d = await axios.get(
-        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${liq}`
-      );
-      potentialDrinkList.push(...d.data.drinks);
+    for (let type of parsedTypes) {
+      if (liquorTypes.includes(type)) {
+        currentLiquorList.push(type);
+        const d = await axios.get(
+          `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${type}`
+        );
+        potentialDrinkListDup.push(...d.data.drinks.map((x) => x.idDrink));
+      }
     }
+
+    let potentialDrinkList = [...new Set(potentialDrinkListDup)];
+
     let resultingList = [];
-    let slice = potentialDrinkList.slice(0, 10);
-    for (let drink of slice) {
+    let placeholder = 0;
+    let i = 0;
+    for (let id of potentialDrinkList) {
       //store in database over time
+      i++;
+      if (resultingList.length >= 3 || i > 30) {
+        placeholder = potentialDrinkList.indexOf(id);
+        break;
+      }
       try {
         const x = await axios.get(
-          `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink.idDrink}`
+          `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
         );
         const drinkData = x.data.drinks[0];
 
@@ -68,6 +83,7 @@ export default async (req, res) => {
       potentialDrinkList,
       currentLiquorList,
       resultingList,
+      placeholder,
     });
   } catch (e) {
     console.error("err", e);
