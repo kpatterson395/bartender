@@ -9,5 +9,10 @@
 }
 
 .form {
-  max-width: 500px;
+  width: 40%;
+  margin-top: 70px;
+}
+
+.submitBtn {
+  display: inline;
 }

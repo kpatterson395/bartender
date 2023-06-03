@@ -34,7 +34,7 @@ export default function Home() {
         placeholder,
       })
       .then((x) => {
-        console.log("list", x.data.resultingList);
+        console.log("list", x);
         setResultingList([...resultingList, ...x.data.resultingList]);
         setLoading(false);
         setPlaceholder(x.data.newPlaceholder);
@@ -44,6 +44,7 @@ export default function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const results = await axios.post("/api/generateListFromImage", {
         image_url: uploadImage,
@@ -59,6 +60,7 @@ export default function Home() {
       setPotentialDrinkList(potentialDrinkList);
       setPlaceholder(placeholder);
       setUploadImage("");
+      setLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -66,7 +68,7 @@ export default function Home() {
 
   return (
     <div className="container text-center">
-      <h1>Bar Cart App</h1>
+      <h1 className="mt-5">bar sensei</h1>
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
@@ -74,23 +76,31 @@ export default function Home() {
           src="https://www.thecocktailproject.com/sites/default/files/liquors.jpg"
           alt="bar cart image"
         /> */}
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label
                 htmlFor="uploadImage"
-                className={`form-label ${styles.input}`}
+                className={`form-label ${styles.inputLabel}`}
               >
-                Upload Image
+                Upload an image of your barcart
               </label>
-              <input
-                type="text"
-                className="form-control"
-                name="uploadImage"
-                id="uploadImage"
-                value={uploadImage}
-                onChange={(e) => setUploadImage(e.target.value)}
-              />
-              <button className="btn btn-primary mt-3">Submit</button>
+              <div className="d-flex">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="uploadImage"
+                  id="uploadImage"
+                  value={uploadImage}
+                  onChange={(e) => setUploadImage(e.target.value)}
+                />
+                <button
+                  className={`btn btn-primary ${styles.submitBtn}`}
+                  disabled={loading}
+                >
+                  Submit
+                </button>
+              </div>
             </div>
           </form>
           <div className="mb-5">
@@ -118,13 +128,24 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={handleAdd}
-            disabled={loading}
-          >
-            More
-          </button>
+          {!!resultingList.length && (
+            <div>
+              <button
+                className="btn btn-primary mb-5"
+                onClick={handleAdd}
+                disabled={loading}
+              >
+                {loading && (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                &nbsp; Get More Drinks
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

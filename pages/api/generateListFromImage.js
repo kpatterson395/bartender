@@ -48,7 +48,7 @@ export default async (req, res) => {
     for (let id of potentialDrinkList) {
       //store in database over time
       i++;
-      if (resultingList.length >= 3 || i > 30) {
+      if (resultingList.length >= 3 || i > 10) {
         placeholder = potentialDrinkList.indexOf(id);
         break;
       }
