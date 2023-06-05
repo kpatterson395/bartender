@@ -45,53 +45,39 @@ export default function Home() {
 
   const handleSubmitFile = async (e) => {
     e.preventDefault();
-    console.log(e);
-    let uploadId = "";
-    // try {
-    //   const results = await axios.post("/api/uploadImage", {
-    //     uploadFileImage:
-    //       "https://www.thecocktailproject.com/sites/default/files/liquors.jpg",
-    //   });
-    //   uploadId = results.data;
-    //   console.log(uploadId);
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    // if (uploadId) {
-    // try {
-    //   const results = await axios.post("/api/generateListFromUpload", {
-    //     uploadId: "i12371387b2aa9b68de4ef77b8ybqzRj",
-    //   });
-    //   console.log(results);
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    // }
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+    const formData = new FormData();
+    formData.append("file", uploadFileImage[0]);
+    const response = await axios.post("/api/uploadImage", formData, config);
+
+    console.log("response", response.data);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const results = await axios.post("/api/generateListFromImage", {
-        image_url: uploadImage,
-      });
-      const {
-        resultingList,
-        potentialDrinkList,
-        currentLiquorList,
-        placeholder,
-      } = results.data;
-      setResultingList(resultingList);
-      setCurrentLiquorList(currentLiquorList);
-      setPotentialDrinkList(potentialDrinkList);
-      setPlaceholder(placeholder);
-      setUploadImage("");
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const results = await axios.post("/api/generateListFromImage", {
+  //       image_url: uploadImage,
+  //     });
+  //     const {
+  //       resultingList,
+  //       potentialDrinkList,
+  //       currentLiquorList,
+  //       placeholder,
+  //     } = results.data;
+  //     setResultingList(resultingList);
+  //     setCurrentLiquorList(currentLiquorList);
+  //     setPotentialDrinkList(potentialDrinkList);
+  //     setPlaceholder(placeholder);
+  //     setUploadImage("");
+  //     setLoading(false);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <div className="container text-center">
@@ -104,7 +90,7 @@ export default function Home() {
           alt="bar cart image"
         /> */}
 
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
+          {/* <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-3">
               <label
                 htmlFor="uploadImage"
@@ -129,9 +115,13 @@ export default function Home() {
                 </button>
               </div>
             </div>
-          </form>
+          </form> */}
 
-          <form action="/api/uploadImage" method="POST">
+          <form
+            action="/api/uploadImage"
+            method="POST"
+            encType="multipart/form-data"
+          >
             <div className="mb-3">
               <label
                 htmlFor="uploadFromFileImage"
@@ -145,9 +135,9 @@ export default function Home() {
                   className="form-control"
                   name="uploadFromFileImage"
                   id="uploadFromFileImage"
-                  value={uploadFileImage}
                   onChange={(e) => {
-                    setUploadFileImage(e.target.value);
+                    console.log(e.target.files);
+                    setUploadFileImage(e.target.files);
                   }}
                 />
                 <button
