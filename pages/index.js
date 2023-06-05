@@ -13,6 +13,7 @@ export default function Home() {
   const [placeholder, setPlaceholder] = useState(0);
   const [loading, setLoading] = useState(false);
   const [uploadImage, setUploadImage] = useState("");
+  const [uploadFileImage, setUploadFileImage] = useState("");
 
   // useEffect(() => {
   //   getInfo()
@@ -40,6 +41,32 @@ export default function Home() {
         setPlaceholder(x.data.newPlaceholder);
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleSubmitFile = async (e) => {
+    e.preventDefault();
+    console.log(e);
+    let uploadId = "";
+    // try {
+    //   const results = await axios.post("/api/uploadImage", {
+    //     uploadFileImage:
+    //       "https://www.thecocktailproject.com/sites/default/files/liquors.jpg",
+    //   });
+    //   uploadId = results.data;
+    //   console.log(uploadId);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+    // if (uploadId) {
+    // try {
+    //   const results = await axios.post("/api/generateListFromUpload", {
+    //     uploadId: "i12371387b2aa9b68de4ef77b8ybqzRj",
+    //   });
+    //   console.log(results);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+    // }
   };
 
   const handleSubmit = async (e) => {
@@ -77,7 +104,7 @@ export default function Home() {
           alt="bar cart image"
         /> */}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-3">
               <label
                 htmlFor="uploadImage"
@@ -93,6 +120,35 @@ export default function Home() {
                   id="uploadImage"
                   value={uploadImage}
                   onChange={(e) => setUploadImage(e.target.value)}
+                />
+                <button
+                  className={`btn btn-primary ${styles.submitBtn}`}
+                  disabled={loading}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <form action="/api/uploadImage" method="POST">
+            <div className="mb-3">
+              <label
+                htmlFor="uploadFromFileImage"
+                className={`form-label ${styles.inputLabel}`}
+              >
+                Upload an image of your barcart
+              </label>
+              <div className="d-flex">
+                <input
+                  type="file"
+                  className="form-control"
+                  name="uploadFromFileImage"
+                  id="uploadFromFileImage"
+                  value={uploadFileImage}
+                  onChange={(e) => {
+                    setUploadFileImage(e.target.value);
+                  }}
                 />
                 <button
                   className={`btn btn-primary ${styles.submitBtn}`}
