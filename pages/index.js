@@ -35,7 +35,6 @@ export default function Home() {
         placeholder,
       })
       .then((x) => {
-        console.log("list", x);
         setResultingList([...resultingList, ...x.data.resultingList]);
         setLoading(false);
         setPlaceholder(x.data.newPlaceholder);
@@ -49,10 +48,28 @@ export default function Home() {
       headers: { "content-type": "multipart/form-data" },
     };
     const formData = new FormData();
-    formData.append("file", uploadFileImage[0]);
+    formData.append("image", uploadFileImage[0]);
     const response = await axios.post("/api/uploadImage", formData, config);
-
-    console.log("response", response.data);
+    console.log("response", response.data.url);
+    try {
+      const results = await axios.post("/api/generateListFromImage", {
+        image_url: response.data.url,
+      });
+      const {
+        resultingList,
+        potentialDrinkList,
+        currentLiquorList,
+        placeholder,
+      } = results.data;
+      setResultingList(resultingList);
+      setCurrentLiquorList(currentLiquorList);
+      setPotentialDrinkList(potentialDrinkList);
+      setPlaceholder(placeholder);
+      setUploadImage("");
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   // const handleSubmit = async (e) => {
@@ -117,11 +134,7 @@ export default function Home() {
             </div>
           </form> */}
 
-          <form
-            action="/api/uploadImage"
-            method="POST"
-            encType="multipart/form-data"
-          >
+          <form onSubmit={handleSubmitFile} encType="multipart/form-data">
             <div className="mb-3">
               <label
                 htmlFor="uploadFromFileImage"
@@ -136,7 +149,6 @@ export default function Home() {
                   name="uploadFromFileImage"
                   id="uploadFromFileImage"
                   onChange={(e) => {
-                    console.log(e.target.files);
                     setUploadFileImage(e.target.files);
                   }}
                 />
