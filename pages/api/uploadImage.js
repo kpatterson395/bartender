@@ -7,7 +7,7 @@ const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET;
 import formidable from "formidable";
 import multer from "multer";
 import fs from "fs";
-
+import streamifier from "streamifier";
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -15,8 +15,15 @@ cloudinary.config({
   api_key: CLOUDINARY_KEY,
   api_secret: CLOUDINARY_SECRET,
 });
-
-const cloudinaryUpload = (file) => cloudinary.uploader.upload(file);
+// const buffer = await uploadFileImage[0].arrayBuffer();
+let cld_upload_stream = cloudinary.uploader.upload_stream(
+  {
+    folder: "uploads",
+  },
+  function (error, result) {
+    return result;
+  }
+);
 
 export const config = {
   api: {
@@ -27,19 +34,15 @@ export const config = {
 export default async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-    form.uploadDir = "./public";
-    form.on("file", function (field, file) {
-      //rename the incoming file to the file's name
-      fs.rename(
-        "./" + file.filepath,
-        form.uploadDir + "/" + file.originalFilename,
-        (err) => {
-          if (err) throw err;
-        }
-      );
-    });
 
-    // form.keepExtensions = true;
+    form.on("file", function (field, file) {
+      let url = cloudinary.uploader
+        .upload(file.filepath)
+        .then((x) => {
+          res.json({ url: x.url });
+        })
+        .catch((e) => console.log(e));
+    });
 
     form.parse(req, (err, fields, file) => {
       if (err) {
@@ -48,11 +51,6 @@ export default async (req, res) => {
         console.log("success");
       }
     });
-    cloudinaryUpload("./public/liquors.jpg")
-      .then((x) => {
-        res.json({ url: x.url });
-      })
-      .catch((e) => console.log(e));
   } catch (e) {
     console.log(e);
   }

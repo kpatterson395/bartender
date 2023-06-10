@@ -14,6 +14,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [uploadImage, setUploadImage] = useState("");
   const [uploadFileImage, setUploadFileImage] = useState("");
+  const [imagesUploadedList, setImagesUploadedList] = useState([]);
 
   // useEffect(() => {
   //   getInfo()
@@ -48,13 +49,17 @@ export default function Home() {
       headers: { "content-type": "multipart/form-data" },
     };
     const formData = new FormData();
+
     formData.append("image", uploadFileImage[0]);
-    const response = await axios.post("/api/uploadImage", formData, config);
-    console.log("response", response.data.url);
     try {
+      // const response = await axios.post("/api/uploadImage", formData, config);
+      // console.log("response", response);
       const results = await axios.post("/api/generateListFromImage", {
-        image_url: response.data.url,
+        image_url:
+          "http://res.cloudinary.com/dxbyugqhl/image/upload/v1686400635/7bdac584fdf18d9e7d4ff980b_bqdtzv.jpg",
       });
+      console.log("results", results.data);
+
       const {
         resultingList,
         potentialDrinkList,
