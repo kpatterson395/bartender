@@ -13,18 +13,8 @@ export default function Home() {
   const [placeholder, setPlaceholder] = useState(0);
   const [loading, setLoading] = useState(false);
   const [uploadImage, setUploadImage] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
   const [uploadFileImage, setUploadFileImage] = useState("");
-  const [imagesUploadedList, setImagesUploadedList] = useState([]);
-
-  // useEffect(() => {
-  //   getInfo()
-  //     .then((x) => {
-  //       setResultingList(x.data.resultingList);
-  //       setPotentialDrinkList(x.data.potentialDrinkList);
-  //       setCurrentLiquorList(x.data.currentLiquorList);
-  //     })
-  //     .catch((e) => console.log(e));
-  // }, []);
 
   const handleAdd = () => {
     setLoading(true);
@@ -52,30 +42,36 @@ export default function Home() {
 
     formData.append("image", uploadFileImage[0]);
     try {
-      // const response = await axios.post("/api/uploadImage", formData, config);
-      // console.log("response", response);
-      const results = await axios.post("/api/generateListFromImage", {
-        image_url:
-          "http://res.cloudinary.com/dxbyugqhl/image/upload/v1686400635/7bdac584fdf18d9e7d4ff980b_bqdtzv.jpg",
-      });
-      console.log("results", results.data);
-
-      const {
-        resultingList,
-        potentialDrinkList,
-        currentLiquorList,
-        placeholder,
-      } = results.data;
-      setResultingList(resultingList);
-      setCurrentLiquorList(currentLiquorList);
-      setPotentialDrinkList(potentialDrinkList);
-      setPlaceholder(placeholder);
-      setUploadImage("");
-      setLoading(false);
+      const { data } = await axios.post("/api/uploadImage", formData, config);
+      setImgUrl(data.url);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (imgUrl.length) {
+      const results = axios
+        .post("/api/generateListFromImage", {
+          image_url: imgUrl,
+        })
+        .then((results) => {
+          const {
+            resultingList,
+            potentialDrinkList,
+            currentLiquorList,
+            placeholder,
+          } = results.data;
+          setResultingList(resultingList);
+          setCurrentLiquorList(currentLiquorList);
+          setPotentialDrinkList(potentialDrinkList);
+          setPlaceholder(placeholder);
+          setUploadImage("");
+          setLoading(false);
+        })
+        .catch((e) => console.error(e));
+    }
+  }, [imgUrl]);
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -107,18 +103,18 @@ export default function Home() {
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
-          {/* <img
-          src="https://www.thecocktailproject.com/sites/default/files/liquors.jpg"
-          alt="bar cart image"
-        /> */}
+          {imgUrl && <img src={imgUrl} alt="bar cart image" />}
 
-          {/* <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <form
+            onSubmit={() => setImgUrl(uploadImage)}
+            encType="multipart/form-data"
+          >
             <div className="mb-3">
               <label
                 htmlFor="uploadImage"
                 className={`form-label ${styles.inputLabel}`}
               >
-                Upload an image of your barcart
+                Add the url of your barcart image
               </label>
               <div className="d-flex">
                 <input
@@ -137,15 +133,15 @@ export default function Home() {
                 </button>
               </div>
             </div>
-          </form> */}
-
+          </form>
+          <p>OR</p>
           <form onSubmit={handleSubmitFile} encType="multipart/form-data">
             <div className="mb-3">
               <label
                 htmlFor="uploadFromFileImage"
                 className={`form-label ${styles.inputLabel}`}
               >
-                Upload an image of your barcart
+                Upload an image of your barcart from your computer
               </label>
               <div className="d-flex">
                 <input

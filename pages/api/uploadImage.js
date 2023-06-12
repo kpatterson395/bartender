@@ -34,9 +34,9 @@ export const config = {
 export default async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-
+    let response = {};
     form.on("file", function (field, file) {
-      let url = cloudinary.uploader
+      cloudinary.uploader
         .upload(file.filepath)
         .then((x) => {
           res.json({ url: x.url });
@@ -48,7 +48,7 @@ export default async (req, res) => {
       if (err) {
         throw err;
       } else {
-        console.log("success");
+        console.log("success", response);
       }
     });
   } catch (e) {

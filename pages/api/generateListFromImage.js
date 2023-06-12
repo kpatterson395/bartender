@@ -76,7 +76,7 @@ export default async (req, res) => {
           resultingList.push(res);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
     res.json({
