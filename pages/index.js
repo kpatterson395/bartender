@@ -97,17 +97,36 @@ export default function Home() {
   //   }
   // };
 
+  const clearImage = () => {
+    setResultingList([]);
+    setCurrentLiquorList([]);
+    setPotentialDrinkList([]);
+    setPlaceholder(0);
+    setUploadImage("");
+    setImgUrl("");
+    setUploadFileImage("");
+  };
+
   return (
     <div className="container text-center">
       <h1 className="mt-5">bar sensei</h1>
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
-          {imgUrl && <img src={imgUrl} alt="bar cart image" />}
+          {imgUrl && (
+            <div>
+              <img src={imgUrl} alt="bar cart image" />
+              <button className="btn btn-danger" onClick={clearImage}>
+                Clear Image
+              </button>
+            </div>
+          )}
 
           <form
-            onSubmit={() => setImgUrl(uploadImage)}
-            encType="multipart/form-data"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setImgUrl(uploadImage);
+            }}
           >
             <div className="mb-3">
               <label
