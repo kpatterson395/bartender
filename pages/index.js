@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { liquorTypes } from "../lib/data";
+import Navbar from "../component/Navbar";
 
 const token = process.env.API_TOKEN;
 
@@ -73,30 +74,6 @@ export default function Home() {
     }
   }, [imgUrl]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     const results = await axios.post("/api/generateListFromImage", {
-  //       image_url: uploadImage,
-  //     });
-  //     const {
-  //       resultingList,
-  //       potentialDrinkList,
-  //       currentLiquorList,
-  //       placeholder,
-  //     } = results.data;
-  //     setResultingList(resultingList);
-  //     setCurrentLiquorList(currentLiquorList);
-  //     setPotentialDrinkList(potentialDrinkList);
-  //     setPlaceholder(placeholder);
-  //     setUploadImage("");
-  //     setLoading(false);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   const clearImage = () => {
     setResultingList([]);
     setCurrentLiquorList([]);
@@ -108,8 +85,8 @@ export default function Home() {
   };
 
   return (
-    <div className="container text-center">
-      <h1 className="mt-5">bar sensei</h1>
+    <div>
+      <Navbar />
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
