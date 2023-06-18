@@ -1,6 +1,9 @@
 import styles from "../styles/Home.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import DrinkList from "../component/DrinkList";
+import LoadMore from "../component/LoadMore";
+import DrinkUpload from "../component/DrinkUpload";
 
 export default function AddImage() {
   const [resultingList, setResultingList] = useState([]);
@@ -29,8 +32,7 @@ export default function AddImage() {
       .catch((e) => console.log(e));
   };
 
-  const handleSubmitFile = async (e) => {
-    e.preventDefault();
+  const handleSubmitFile = async () => {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
@@ -44,6 +46,10 @@ export default function AddImage() {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    handleSubmitFile();
+  }, [uploadFileImage]);
 
   useEffect(() => {
     if (imgUrl.length) {
@@ -81,6 +87,11 @@ export default function AddImage() {
 
   return (
     <div>
+      <DrinkUpload
+        handleSubmitFile={handleSubmitFile}
+        setUploadFileImage={setUploadFileImage}
+      />
+
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
           {imgUrl && (
@@ -115,7 +126,7 @@ export default function AddImage() {
                   onChange={(e) => setUploadImage(e.target.value)}
                 />
                 <button
-                  className={`btn btn-primary ${styles.submitBtn}`}
+                  className={`btn ${styles.submitBtn}`}
                   disabled={loading}
                 >
                   Submit
@@ -124,7 +135,7 @@ export default function AddImage() {
             </div>
           </form>
           <p>OR</p>
-          <form onSubmit={handleSubmitFile} encType="multipart/form-data">
+          {/* <form onSubmit={handleSubmitFile} encType="multipart/form-data">
             <div className="mb-3">
               <label
                 htmlFor="uploadFromFileImage"
@@ -143,57 +154,20 @@ export default function AddImage() {
                   }}
                 />
                 <button
-                  className={`btn btn-primary ${styles.submitBtn}`}
+                  className={`btn ${styles.submitBtn}`}
                   disabled={loading}
                 >
                   Submit
                 </button>
               </div>
             </div>
-          </form>
-          <div className="mb-5">
-            <ul className={styles.list}>
-              {resultingList.map((m) => (
-                <li key={m.name} className={`card mt-2 mb-2 ${styles.card}`}>
-                  <div className="card-body">
-                    <h3 className="card-title">{m.name}</h3>
-                    <div className="card-text">
-                      <ul className={styles.list}>
-                        <h4>items you have:</h4>
-                        {m.haves.map((x, i) => (
-                          <li key={`${m.name}-${x}-${i}`}>{x}</li>
-                        ))}
-                      </ul>
-                      <ul className={styles.list}>
-                        <h4>items you need:</h4>
-                        {m.needs.map((x, i) => (
-                          <li key={`${m.name}-${x}-${i}`}>{x}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {!!resultingList.length && (
-            <div>
-              <button
-                className="btn btn-primary mb-5"
-                onClick={handleAdd}
-                disabled={loading}
-              >
-                {loading && (
-                  <span
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                &nbsp; Get More Drinks
-              </button>
-            </div>
-          )}
+          </form> */}
+          <DrinkList resultingList={resultingList} />
+          <LoadMore
+            resultingList={resultingList}
+            handleAdd={handleAdd}
+            loading={loading}
+          />
         </div>
       </div>
     </div>

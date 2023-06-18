@@ -1,0 +1,30 @@
+.drinkupload {
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  border-radius: 1em;
+  margin: 2em auto;
+  padding: 1.5em;
+}
+
+.container {
+  border: 2px dashed #cdcecf;
+  border-radius: 5px;
+  height: 100%;
+  text-align: center;
+  padding-top: 25%;
+}
+
+.container:hover {
+  border-color: #974912;
+  background-color: #fee4d2;
+}
+
+.input {
+  display: none;
+}
+.customFileUpload {
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+}
