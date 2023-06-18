@@ -48,10 +48,13 @@ export default function AddImage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     handleSubmitFile();
   }, [uploadFileImage]);
 
   useEffect(() => {
+    setLoading(false);
+
     if (imgUrl.length) {
       const results = axios
         .post("/api/generateListFromImage", {
@@ -94,16 +97,25 @@ export default function AddImage() {
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
+          {loading && (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          )}
+
           {imgUrl && (
             <div>
               <img src={imgUrl} alt="bar cart image" />
+              <button className="btn">Use Image</button>
               <button className="btn btn-danger" onClick={clearImage}>
                 Clear Image
               </button>
             </div>
           )}
 
-          <form
+          {/* <form
             onSubmit={(e) => {
               e.preventDefault();
               setImgUrl(uploadImage);
@@ -133,35 +145,8 @@ export default function AddImage() {
                 </button>
               </div>
             </div>
-          </form>
-          <p>OR</p>
-          {/* <form onSubmit={handleSubmitFile} encType="multipart/form-data">
-            <div className="mb-3">
-              <label
-                htmlFor="uploadFromFileImage"
-                className={`form-label ${styles.inputLabel}`}
-              >
-                Upload an image of your barcart from your computer
-              </label>
-              <div className="d-flex">
-                <input
-                  type="file"
-                  className="form-control"
-                  name="uploadFromFileImage"
-                  id="uploadFromFileImage"
-                  onChange={(e) => {
-                    setUploadFileImage(e.target.files);
-                  }}
-                />
-                <button
-                  className={`btn ${styles.submitBtn}`}
-                  disabled={loading}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
           </form> */}
+
           <DrinkList resultingList={resultingList} />
           <LoadMore
             resultingList={resultingList}
