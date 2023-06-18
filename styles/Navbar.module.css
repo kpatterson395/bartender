@@ -1,6 +1,14 @@
 .navbar {
   background-color: #fc7a1e;
-  padding: 0em 5em;
+  padding: 0.5em 6em;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .brand {

@@ -1,10 +1,11 @@
 import styles from "../styles/Navbar.module.css";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className={`${styles.navbar} navbar`}>
-      <div className="container-fluid">
-        <a className={styles.brand}>
+    <nav className={styles.navbar}>
+      <div className={styles.container}>
+        <Link href="/" className={styles.brand}>
           <svg
             width="45"
             height="50"
@@ -105,18 +106,8 @@ const Navbar = () => {
           <p className={styles.title}>
             bar<span className={styles.subset}>sensei</span>
           </p>
-        </a>
-        <form className="d-flex" role="search">
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button className="btn" type="submit">
-            Search
-          </button>
-        </form>
+        </Link>
+        <Link href="/addimage">Add Image</Link>
       </div>
     </nav>
   );
