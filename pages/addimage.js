@@ -48,14 +48,16 @@ export default function AddImage() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    handleSubmitFile();
+    if (uploadFileImage) {
+      setLoading(true);
+      handleSubmitFile();
+    }
   }, [uploadFileImage]);
 
   useEffect(() => {
-    setLoading(false);
-
     if (imgUrl.length) {
+      setLoading(false);
+
       const results = axios
         .post("/api/generateListFromImage", {
           image_url: imgUrl,
@@ -72,7 +74,6 @@ export default function AddImage() {
           setPotentialDrinkList(potentialDrinkList);
           setPlaceholder(placeholder);
           setUploadImage("");
-          setLoading(false);
         })
         .catch((e) => console.error(e));
     }
