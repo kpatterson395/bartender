@@ -99,20 +99,20 @@ export default function AddImage() {
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
           {loading && (
-            <span
-              className="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <div className="text-center">
+              <div className="spinner-grow" role="status"></div>
+            </div>
           )}
 
           {imgUrl && (
-            <div>
+            <div className="text-center">
               <img src={imgUrl} alt="bar cart image" />
-              <button className="btn">Use Image</button>
-              <button className="btn btn-danger" onClick={clearImage}>
-                Clear Image
-              </button>
+              <div className="mt-3">
+                <button className="btn">Use Image</button>
+                <button className="btn btn-danger" onClick={clearImage}>
+                  Clear Image
+                </button>
+              </div>
             </div>
           )}
 
