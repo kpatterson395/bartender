@@ -1,5 +1,7 @@
 import styles from "../styles/Home.module.css";
 import axios from "axios";
+import Image from "next/image";
+
 import { useEffect, useState } from "react";
 import DrinkList from "../component/DrinkList";
 import LoadMore from "../component/LoadMore";
@@ -104,9 +106,16 @@ export default function AddImage() {
             </div>
           )}
 
-          {imgUrl && (
+          {
             <div className="text-center">
-              <img src={imgUrl} alt="bar cart image" />
+              <Image
+                src={imgUrl}
+                className={imgUrl ? styles.appearImage : styles.barImage}
+                alt="bar cart image"
+                width={500}
+                height={500}
+              />
+
               <div className="mt-3">
                 <button className="btn">Use Image</button>
                 <button className="btn btn-danger" onClick={clearImage}>
@@ -114,7 +123,7 @@ export default function AddImage() {
                 </button>
               </div>
             </div>
-          )}
+          }
 
           {/* <form
             onSubmit={(e) => {

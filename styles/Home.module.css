@@ -8,3 +8,18 @@
   background-color: #fc7a1e;
   color: white;
 }
+
+.barImage {
+  opacity: 0;
+  transition: all 1s linear;
+}
+
+.appearImage {
+  opacity: 1;
+  transition: all 1s linear;
+}
+
+.imgContainer {
+  width: 400px;
+  height: 500px;
+}
