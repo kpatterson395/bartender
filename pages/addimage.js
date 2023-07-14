@@ -43,6 +43,7 @@ export default function AddImage() {
     formData.append("image", uploadFileImage[0]);
     try {
       const { data } = await axios.post("/api/uploadImage", formData, config);
+      console.log(data);
       setImgUrl(data.url);
     } catch (e) {
       console.error(e);
@@ -57,7 +58,7 @@ export default function AddImage() {
   }, [uploadFileImage]);
 
   useEffect(() => {
-    if (imgUrl.length) {
+    if (imgUrl && imgUrl.length) {
       setLoading(false);
 
       const results = axios
@@ -108,13 +109,17 @@ export default function AddImage() {
 
           {
             <div className="text-center">
-              <Image
-                src={imgUrl}
-                className={imgUrl ? styles.appearImage : styles.barImage}
-                alt="bar cart image"
-                width={500}
-                height={500}
-              />
+              <div className={styles.imageholder}>
+                {imgUrl && (
+                  <Image
+                    src={imgUrl}
+                    className={imgUrl ? styles.appearImage : styles.barImage}
+                    alt="bar cart image"
+                    fill={true}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                )}
+              </div>
 
               <div className="mt-3">
                 <button className="btn">Use Image</button>

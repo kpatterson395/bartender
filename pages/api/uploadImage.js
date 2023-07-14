@@ -15,15 +15,6 @@ cloudinary.config({
   api_key: CLOUDINARY_KEY,
   api_secret: CLOUDINARY_SECRET,
 });
-// const buffer = await uploadFileImage[0].arrayBuffer();
-let cld_upload_stream = cloudinary.uploader.upload_stream(
-  {
-    folder: "uploads",
-  },
-  function (error, result) {
-    return result;
-  }
-);
 
 export const config = {
   api: {
@@ -32,26 +23,15 @@ export const config = {
 };
 
 export default async (req, res) => {
-  try {
-    const form = new formidable.IncomingForm();
-    let response = {};
-    form.on("file", function (field, file) {
-      cloudinary.uploader
-        .upload(file.filepath)
-        .then((x) => {
-          res.json({ url: x.url });
-        })
-        .catch((e) => console.log(e));
-    });
-
-    form.parse(req, (err, fields, file) => {
-      if (err) {
-        throw err;
-      } else {
-        console.log("success", response);
-      }
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields, file) => {
+    if (err) {
+      throw err;
+    } else {
+      cloudinary.uploader.upload(file.image.filepath).then((x) => {
+        res.json({ url: x.url });
+      });
+    }
+  });
+  res.end();
 };
