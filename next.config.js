@@ -4,8 +4,6 @@ module.exports = {
       {
         protocol: "http",
         hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/*",
       },
     ],
   },
