@@ -2,10 +2,9 @@ import styles from "../styles/Home.module.css";
 import axios from "axios";
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DrinkList from "../component/DrinkList";
 import LoadMore from "../component/LoadMore";
-import DrinkUpload from "../component/DrinkUpload";
 
 export default function AddImage() {
   const [resultingList, setResultingList] = useState([]);
@@ -16,6 +15,8 @@ export default function AddImage() {
   const [uploadImage, setUploadImage] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [uploadFileImage, setUploadFileImage] = useState("");
+
+  const aRef = useRef("");
 
   const handleAdd = () => {
     setLoading(true);
@@ -43,7 +44,6 @@ export default function AddImage() {
     formData.append("image", uploadFileImage[0]);
     try {
       const { data } = await axios.post("/api/uploadImage", formData, config);
-      console.log(data);
       setImgUrl(data.url);
     } catch (e) {
       console.error(e);
@@ -60,7 +60,22 @@ export default function AddImage() {
   useEffect(() => {
     if (imgUrl && imgUrl.length) {
       setLoading(false);
+    }
+  }, [imgUrl]);
 
+  const clearImage = () => {
+    setResultingList([]);
+    setCurrentLiquorList([]);
+    setPotentialDrinkList([]);
+    setPlaceholder(0);
+    setUploadImage("");
+    setImgUrl("");
+    setUploadFileImage("");
+    aRef.current.value = "";
+  };
+
+  const generateList = () => {
+    if (imgUrl && imgUrl.length) {
       const results = axios
         .post("/api/generateListFromImage", {
           image_url: imgUrl,
@@ -80,24 +95,32 @@ export default function AddImage() {
         })
         .catch((e) => console.error(e));
     }
-  }, [imgUrl]);
-
-  const clearImage = () => {
-    setResultingList([]);
-    setCurrentLiquorList([]);
-    setPotentialDrinkList([]);
-    setPlaceholder(0);
-    setUploadImage("");
-    setImgUrl("");
-    setUploadFileImage("");
   };
 
   return (
     <div>
-      <DrinkUpload
-        handleSubmitFile={handleSubmitFile}
-        setUploadFileImage={setUploadFileImage}
-      />
+      <div className={styles.drinkupload}>
+        <div className={styles.container}>
+          <form onSubmit={handleSubmitFile} encType="multipart/form-data">
+            <label
+              htmlFor="uploadFromFileImage"
+              className={styles.customFileUpload}
+            >
+              click here to upload image of your barcart
+            </label>
+            <input
+              ref={aRef}
+              id="uploadFromFileImage"
+              name="uploadFromFileImage"
+              type="file"
+              className={styles.input}
+              onChange={(e) => {
+                setUploadFileImage(e.target.files);
+              }}
+            />
+          </form>
+        </div>
+      </div>
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
@@ -122,7 +145,9 @@ export default function AddImage() {
               </div>
 
               <div className="mt-3">
-                <button className="btn">Use Image</button>
+                <button className="btn" onClick={generateList}>
+                  Use Image
+                </button>
                 <button className="btn btn-danger" onClick={clearImage}>
                   Clear Image
                 </button>

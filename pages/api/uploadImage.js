@@ -19,19 +19,23 @@ cloudinary.config({
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
 
 export default async (req, res) => {
   const form = new formidable.IncomingForm();
+  let response = {};
+
   form.parse(req, (err, fields, file) => {
     if (err) {
-      throw err;
+      return res.status(400).json({
+        error: "Image could not upload",
+      });
     } else {
-      cloudinary.uploader.upload(file.image.filepath).then((x) => {
-        res.json({ url: x.url });
+      cloudinary.uploader.upload(file.image.filepath).then((a) => {
+        return res.status(200).json({ url: a.url });
       });
     }
   });
-  res.end();
 };

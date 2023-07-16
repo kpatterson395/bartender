@@ -1,6 +1,9 @@
 import styles from "../styles/DrinkUpload.module.css";
+import { useRef } from "react";
 
 const DrinkUpload = ({ handleSubmitFile, setUploadFileImage }) => {
+  const aRef = useRef("");
+
   return (
     <div className={styles.drinkupload}>
       <div className={styles.container}>
@@ -17,6 +20,7 @@ const DrinkUpload = ({ handleSubmitFile, setUploadFileImage }) => {
             type="file"
             className={styles.input}
             onChange={(e) => {
+              console.log("e", e);
               setUploadFileImage(e.target.files);
             }}
           />
