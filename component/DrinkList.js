@@ -47,25 +47,29 @@ const DrinkList = ({ resultingList }) => {
                   style={{ display: showList ? "block" : "none" }}
                 >
                   <ul className={styles.list}>
-                    <h4>items you have:</h4>
                     {m.haves.map((x, i) => (
-                      <li
-                        className={styles.listItem}
-                        key={`${m.name}-${x}-${i}`}
-                      >
-                        {x}
-                      </li>
+                      <p className={styles.listParagraph}>
+                        <li
+                          className={styles.listItem}
+                          key={`${m.name}-${x}-${i}`}
+                        >
+                          {x}
+                        </li>
+                        <span className={styles.detect}>detected</span>
+                      </p>
                     ))}
                   </ul>
                   <ul className={styles.list}>
-                    <h4>items you need:</h4>
                     {m.needs.map((x, i) => (
-                      <li
-                        className={styles.listItem}
-                        key={`${m.name}-${x}-${i}`}
-                      >
-                        {x}
-                      </li>
+                      <p className={styles.listParagraph}>
+                        <li
+                          className={styles.listItem}
+                          key={`${m.name}-${x}-${i}`}
+                        >
+                          {x}
+                        </li>
+                        <span className={styles.detect}>not detected</span>
+                      </p>
                     ))}
                   </ul>
                 </div>

@@ -19,11 +19,22 @@
 }
 
 .listContainer {
-  background-color: #e6e6e7;
+  background-color: #f6f6f6;
   padding: 2em;
   border-radius: 17px;
 }
 
 .listItem {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #e6e6e7;
+}
+
+.listParagraph {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.detect {
+  color: #fc7a1e;
 }
