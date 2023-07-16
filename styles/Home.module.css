@@ -20,8 +20,8 @@
 }
 
 .imageholder {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 300px;
   display: block;
   position: relative;
 }
@@ -55,4 +55,9 @@
   border: none;
   display: inline-block;
   cursor: pointer;
+}
+
+.spinner {
+  display: inline-block;
+  text-align: center;
 }

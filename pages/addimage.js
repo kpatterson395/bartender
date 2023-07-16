@@ -76,6 +76,7 @@ export default function AddImage() {
 
   const generateList = () => {
     if (imgUrl && imgUrl.length) {
+      setLoading(true);
       const results = axios
         .post("/api/generateListFromImage", {
           image_url: imgUrl,
@@ -91,7 +92,7 @@ export default function AddImage() {
           setCurrentLiquorList(currentLiquorList);
           setPotentialDrinkList(potentialDrinkList);
           setPlaceholder(placeholder);
-          setUploadImage("");
+          setLoading(false);
         })
         .catch((e) => console.error(e));
     }
@@ -124,24 +125,22 @@ export default function AddImage() {
 
       <div className="d-flex justify-content-center">
         <div className={styles.form}>
-          {loading && (
+          {loading && imgUrl.length === 0 && (
             <div className="text-center">
               <div className="spinner-grow" role="status"></div>
             </div>
           )}
 
-          {
-            <div className="text-center">
+          {imgUrl && (
+            <div className="text-center mb-5">
               <div className={styles.imageholder}>
-                {imgUrl && (
-                  <Image
-                    src={imgUrl}
-                    className={imgUrl ? styles.appearImage : styles.barImage}
-                    alt="bar cart image"
-                    fill={true}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                )}
+                <Image
+                  src={imgUrl}
+                  className={imgUrl ? styles.appearImage : styles.barImage}
+                  alt="bar cart image"
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
               </div>
 
               <div className="mt-3">
@@ -153,9 +152,11 @@ export default function AddImage() {
                 </button>
               </div>
             </div>
-          }
+          )}
+        </div>
+      </div>
 
-          {/* <form
+      {/* <form
             onSubmit={(e) => {
               e.preventDefault();
               setImgUrl(uploadImage);
@@ -187,14 +188,21 @@ export default function AddImage() {
             </div>
           </form> */}
 
-          <DrinkList resultingList={resultingList} />
-          <LoadMore
-            resultingList={resultingList}
-            handleAdd={handleAdd}
-            loading={loading}
-          />
+      <DrinkList resultingList={resultingList} />
+      {loading && imgUrl && (
+        <div className="text-center mt-3 mb-5">
+          <span
+            className={`spinner-border spinner-border-sm`}
+            role="status"
+            aria-hidden="true"
+          ></span>
         </div>
-      </div>
+      )}
+      <LoadMore
+        resultingList={resultingList}
+        handleAdd={handleAdd}
+        loading={loading}
+      />
     </div>
   );
 }
