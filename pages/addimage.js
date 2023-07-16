@@ -131,28 +131,33 @@ export default function AddImage() {
             </div>
           )}
 
-          {imgUrl && (
-            <div className="text-center mb-5">
-              <div className={styles.imageholder}>
-                <Image
-                  src={imgUrl}
-                  className={imgUrl ? styles.appearImage : styles.barImage}
-                  alt="bar cart image"
-                  fill={true}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
+          <div
+            className="text-center mb-5"
+            style={{
+              opacity: imgUrl ? 1 : 0,
+              transition: "all 1s linear",
+            }}
+          >
+            <div className={styles.imageholder}>
+              <Image
+                src={imgUrl}
+                // className={styles.barImage}
 
-              <div className="mt-3">
-                <button className="btn" onClick={generateList}>
-                  Use Image
-                </button>
-                <button className="btn btn-danger" onClick={clearImage}>
-                  Clear Image
-                </button>
-              </div>
+                alt="bar cart image"
+                fill={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
             </div>
-          )}
+
+            <div className="mt-3">
+              <button className="btn" onClick={generateList}>
+                Use Image
+              </button>
+              <button className="btn btn-danger" onClick={clearImage}>
+                Clear Image
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -7,3 +7,23 @@
 .card {
   min-width: 500px;
 }
+
+.dropDown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #fc7a1e;
+}
+.dropDown:hover {
+  cursor: pointer;
+}
+
+.listContainer {
+  background-color: #e6e6e7;
+  padding: 2em;
+  border-radius: 17px;
+}
+
+.listItem {
+  border-bottom: 1px solid black;
+}
