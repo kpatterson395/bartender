@@ -2,39 +2,6 @@
   text-align: left;
   list-style: none;
   padding-left: 0;
-}
-
-.card {
-  min-width: 500px;
-}
-
-.dropDown {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  color: #fc7a1e;
-}
-.dropDown:hover {
-  cursor: pointer;
-}
-
-.listContainer {
-  background-color: #f6f6f6;
-  padding: 2em;
-  border-radius: 17px;
-}
-
-.listItem {
-  border-bottom: 1px solid #e6e6e7;
-}
-
-.listParagraph {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-}
-
-.detect {
-  color: #fc7a1e;
+  max-width: 600px;
+  margin: auto;
 }
