@@ -203,11 +203,13 @@ export default function AddImage() {
           ></span>
         </div>
       )}
-      <LoadMore
-        resultingList={resultingList}
-        handleAdd={handleAdd}
-        loading={loading}
-      />
+      {placeholder < potentialDrinkList.length - 1 && (
+        <LoadMore
+          resultingList={resultingList}
+          handleAdd={handleAdd}
+          loading={loading}
+        />
+      )}
     </div>
   );
 }
