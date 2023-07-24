@@ -39,3 +39,14 @@ button {
   font-weight: bold;
   background-color: #fc7a1e;
 }
+
+.main {
+  width: 50%;
+  margin: auto;
+  margin-top: 2em;
+}
+
+.link {
+  text-decoration: underline;
+  color: #fc7a1e;
+}
