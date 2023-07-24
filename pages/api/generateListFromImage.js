@@ -1,6 +1,7 @@
 import axios from "axios";
 const token = process.env.API_TOKEN;
 import { liquorTypes } from "../../lib/data";
+import { getDrinks } from "./getDrinks";
 
 export default async (req, res) => {
   const { image_url } = req.body;
@@ -48,35 +49,13 @@ export default async (req, res) => {
     for (let id of potentialDrinkList) {
       //store in database over time
       i++;
-      if (resultingList.length >= 3 || i > 10) {
+      if (resultingList.length >= 3) {
         placeholder = potentialDrinkList.indexOf(id);
         break;
       }
-      try {
-        const x = await axios.get(
-          `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
-        );
-        const drinkData = x.data.drinks[0];
-
-        let res = { name: drinkData.strDrink, haves: [], needs: [] };
-        let ingredients = [];
-        Object.keys(drinkData).forEach((key) => {
-          if (key.includes("Ingredient") && drinkData[key]) {
-            ingredients.push(drinkData[key]);
-          }
-        });
-        ingredients.forEach((i) => {
-          if (currentLiquorList.includes(i.toLowerCase())) {
-            res.haves.push(i);
-          } else {
-            res.needs.push(i);
-          }
-        });
-        if (res.haves.length > 2) {
-          resultingList.push(res);
-        }
-      } catch (e) {
-        console.error(e);
+      const res = await getDrinks(id, currentLiquorList);
+      if (res) {
+        resultingList.push(res);
       }
     }
     res.json({
