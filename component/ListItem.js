@@ -27,7 +27,7 @@ const ListItem = ({ drink }) => {
                 viewBox="0 0 16 16"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d={
                     showList
                       ? "M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
@@ -43,13 +43,11 @@ const ListItem = ({ drink }) => {
           >
             <ul className={styles.list}>
               {drink.haves.map((x, i) => (
-                <p className={styles.listParagraph}>
-                  <li
-                    className={styles.listItem}
-                    key={`${drink.name}-${x}-${i}`}
-                  >
-                    {x}
-                  </li>
+                <p
+                  className={styles.listParagraph}
+                  key={`${drink.name}-${x}-${i}`}
+                >
+                  <li className={styles.listItem}>{x}</li>
                   <span className={styles.detect}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -68,13 +66,11 @@ const ListItem = ({ drink }) => {
             </ul>
             <ul className={styles.list}>
               {drink.needs.map((x, i) => (
-                <p className={styles.listParagraph}>
-                  <li
-                    className={styles.listItem}
-                    key={`${drink.name}-${x}-${i}`}
-                  >
-                    {x}
-                  </li>
+                <p
+                  className={styles.listParagraph}
+                  key={`${drink.name}-${x}-${i}`}
+                >
+                  <li className={styles.listItem}>{x}</li>
                   <span className={styles.noDetect}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -6,8 +6,8 @@ const DrinkList = ({ resultingList }) => {
   return (
     <div className="mb-5 mx-5">
       <ul className={styles.list}>
-        {resultingList.map((m) => (
-          <ListItem drink={m} />
+        {resultingList.map((m, i) => (
+          <ListItem drink={m} key={`${m.name}-${i}`} />
         ))}
       </ul>
     </div>

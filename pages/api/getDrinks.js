@@ -5,6 +5,7 @@ export const getDrinks = async (drink, currentLiquorList) => {
     const x = await axios.get(
       `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink}`
     );
+
     const drinkData = x.data.drinks[0];
     let res = { name: drinkData.strDrink, haves: [], needs: [] };
     let ingredients = [];
@@ -20,10 +21,11 @@ export const getDrinks = async (drink, currentLiquorList) => {
         res.needs.push(i);
       }
     });
-    if (res.haves.length > 2) {
+    if (res.haves.length >= 2) {
       return res;
     }
   } catch (e) {
-    console.log("err1", e);
+    console.log("err1", e.response.status);
+    if (e.response.status === 429) return "error";
   }
 };
