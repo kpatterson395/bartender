@@ -15,6 +15,7 @@ export default function AddImage() {
   const [uploadImage, setUploadImage] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [uploadFileImage, setUploadFileImage] = useState("");
+  const [error, setError] = useState("");
 
   const aRef = useRef("");
 
@@ -81,18 +82,23 @@ export default function AddImage() {
         .post("/api/generateListFromImage", {
           image_url: imgUrl,
         })
-        .then((results) => {
-          const {
-            resultingList,
-            potentialDrinkList,
-            currentLiquorList,
-            placeholder,
-          } = results.data;
-          setResultingList(resultingList);
-          setCurrentLiquorList(currentLiquorList);
-          setPotentialDrinkList(potentialDrinkList);
-          setPlaceholder(placeholder);
-          setLoading(false);
+        .then((r) => {
+          if (r.data.error) {
+            setError(r.data.error);
+            setLoading(false);
+          } else {
+            const {
+              resultingList,
+              potentialDrinkList,
+              currentLiquorList,
+              placeholder,
+            } = r.data;
+            setResultingList(resultingList);
+            setCurrentLiquorList(currentLiquorList);
+            setPotentialDrinkList(potentialDrinkList);
+            setPlaceholder(placeholder);
+            setLoading(false);
+          }
         })
         .catch((e) => console.error(e));
     }
@@ -157,6 +163,22 @@ export default function AddImage() {
                 Clear Image
               </button>
             </div>
+            {error && (
+              <div
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert"
+              >
+                <strong>Uh oh!</strong> {error}
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="alert"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
